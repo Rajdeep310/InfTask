@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import React ,{useState,useEffect} from 'react'
 import './App.css';
+import Person from './Person';
 
 function App() {
+  const [values, setvalues] = useState([])
+  useEffect(() => {
+    const url='https://reqres.in/api/users?page=1'
+    const fetchData=async()=>{
+      let response= await fetch(url);
+      let items=await response.json();
+
+      let data=items.data;
+      setvalues(data);
+
+    }
+
+    fetchData();
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {values.map(item=>{
+        return(
+        <Person key={item.id} {...item} />
+        )
+      })}
     </div>
   );
 }
