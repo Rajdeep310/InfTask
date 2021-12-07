@@ -1,29 +1,25 @@
-import React ,{useState,useEffect} from 'react'
+import React ,{useContext} from 'react'
 import './App.css';
 import Person from './Person';
 
+import { AppContext } from './Context'
+
 function App() {
-  const [values, setvalues] = useState([])
-  useEffect(() => {
-    const url='https://reqres.in/api/users?page=1'
-    const fetchData=async()=>{
-      let response= await fetch(url);
-      let items=await response.json();
 
-      let data=items.data;
-      setvalues(data);
-
-    }
-
-    fetchData();
-  }, [])
+  const {values,onref} = useContext(AppContext);
+  
   return (
     <div className="App">
+      <h2>All people</h2>
       {values.map(item=>{
         return(
         <Person key={item.id} {...item} />
         )
       })}
+
+      {values.length===0 ? <div>No people left . Please Refresh</div> : <></>}
+
+<button onClick={onref} >Refresh</button>
     </div>
   );
 }
